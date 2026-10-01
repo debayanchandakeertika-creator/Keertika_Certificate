@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post Order Question</title>
+</head>
+<body>
+
+<h2>Please add questions</h2>
+<form method="get" action="/submitqs">
+<table>
+  <thead>
+  <tr>
+    <th>Place Name</th>
+    <th>Please enter Question</th>
+    <th>Please enter right Ans</th>
+    <th>Please enter Type</th>
+    <th>Please enter Shift</th>
+    <th>Start time</th>
+    <th>end time</th>
+
+
+  </tr>
+  </thead>
+  <tbody>
+  {% if d %}  
+    {% for i in d %}
+      <tr>
+        <td><input style="width: 80%" type="text" value='{{place}}' name=place readonly></td>
+        <!-- <td><input type="textarea" rows="4" name={{i.qs}}></td>
+ -->        <td><textarea name={{i.qs}}></textarea></td>
+        <td>
+          <select id="{{i.ans}}" name="{{i.ans}}">
+          <option value="YES">----</option>
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+          </select>
+        </td>
+        
+        <!-- <td><input type="text" name={{i.ans}}></td> -->
+        <td>
+          <select id="{{i.type}}" name="{{i.type}}">
+      <option value="SG">----</option>
+        <option value="SG">Security Guard</option>
+        <option value="SV">Supervisor</option>
+      </select>
+    </td>
+
+    <td>
+      <select id="{{i.shift}}" name="{{i.shift}}">
+      <option value="ALL">----</option>
+        <option value="ALL">ALL</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="G">G</option>
+        <option value="AB">AB</option>
+        <option value="GC">GC</option>
+      </select>
+      
+    </td>
+      <td><input type="text" name={{i.start}}></td>
+      <td><input type="text" name={{i.end}}></td>
+      
+
+      
+
+
+      </tr>
+    {% endfor %}
+  {% endif %}
+  <tr>
+    <td>
+      Summary
+    </td>
+    <td>
+      <p>Site Name:<input type="text" name=site_name value="{{site}}" readonly></p>
+    </td>
+    <td>
+      <p>Total QS: <input type="text" name=qs_count value={{qscount}} readonly></p>
+
+      <p><input type="text" name=uuid value={{uuid}} hidden="true"></p>
+    </td>
+    <td><input type="submit" value="Submit"></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+  </tr>
+  </tbody>
+  
+</table>
+</form>
+
+</body>
+</html>

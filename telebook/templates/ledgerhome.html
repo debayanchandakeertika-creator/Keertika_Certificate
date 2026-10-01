@@ -1,0 +1,363 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI with File Upload</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .container {
+      max-width: 40%;
+      min-width: 35%;
+    }
+    form {
+      border: 2px solid #b3d7ff;
+      border-radius: 10px;
+      background-color: #eaf6ff;
+      padding: 20px;
+    }
+    .upload-zone {
+      border: 2px dashed #007bff;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+      background-color: #f9f9f9;
+      cursor: pointer;
+    }
+    .upload-zone.dragover {
+      background-color: #e9ecef;
+    }
+    .file-list {
+      margin-top: 10px;
+    }
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      margin-bottom: 5px;
+      background-color: #f8f9fa;
+    }
+    .file-item span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    {% if file_name %}
+      <h2 class="text-center mb-4">Successful! Please download the file.</h2>
+      <a href="/downloadexcel?filename={{ file_name }}&filepath={{ file_path }}" class="btn btn-success btn-lg d-block text-center">Download Excel</a>
+    {% else %}
+      <h3 class="text-center mb-4">Upload Ledger/Tally dump File</h2>
+      <ol>
+        <li>Please enter the sitecode present in stock statement.</li>
+        <li>Example: IFM/BHR/INV/BPAC/01</li>
+        <li>Select stardDate and endDate properly in dd-mm-yyyy format.</li>
+        <li>Filename must be sitecode.xlsx format.</li>
+        <li>Example: IFMBHRINVBPAC01</li>
+        <li>Make sure the format is xlsx</li>
+        <li>Upload the tally dump for site code for same date range.</li>
+        <li>Select the Dates properly in dd-mm-yyyy format.</li>
+        <li>Click on process and wait for download button.</li>
+        <li>Download the updated ledger/tally file.</li>
+      </ol>
+    {% endif %}
+    <form id="uploadForm" action="{% url 'processledger' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="siteCode" class="form-label">Site Code</label>
+        <input type="text" id="siteCode" name="siteCode" class="form-control" placeholder="Enter Site Code" required>
+      </div>
+      <div class="mb-3">
+        <label for="siteType" class="form-label">Site Type</label>
+        <select id="siteType" name="siteType" class="form-select" required>
+          <option value="" disabled selected>Select Site Type</option>
+          <option value="G">G</option>
+          <option value="O">O</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input type="date" id="startDate" name="startDate" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="endDate" class="form-label">End Date</label>
+        <input type="date" id="endDate" name="endDate" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Upload Ledger File</label>
+        <div class="upload-zone" id="uploadZone">
+          Drag & Drop file here or click to upload
+        </div>
+        <input type="file" id="fileInput" name="files[]" class="form-control d-none" multiple accept=".xlsx, .xls">
+        <div id="fileList" class="file-list"></div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Process</button>
+    </form>
+  </div>
+
+  <script>
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+
+    let uploadedFiles = [];
+
+    const updateFileList = () => {
+      fileList.innerHTML = '';
+      uploadedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.innerHTML = `
+          <span>${file.name}</span>
+          <button type="button" class="btn btn-sm btn-danger" onclick="removeFile(${index})">Remove</button>
+        `;
+        fileList.appendChild(fileItem);
+      });
+    };
+
+    const removeFile = (index) => {
+      uploadedFiles.splice(index, 1);
+      updateFileList();
+    };
+
+    const addFiles = (files) => {
+      files.forEach(file => {
+        if (!uploadedFiles.some(uploadedFile => uploadedFile.name === file.name)) {
+          uploadedFiles.push(file);
+        } else {
+          alert(`File "${file.name}" is already uploaded.`);
+        }
+      });
+      updateFileList();
+    };
+
+    uploadZone.addEventListener('click', () => fileInput.click());
+    uploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.classList.add('dragover');
+    });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('dragover');
+      const files = Array.from(e.dataTransfer.files);
+      addFiles(files);
+    });
+
+    fileInput.addEventListener('change', () => {
+      const files = Array.from(fileInput.files);
+      addFiles(files);
+    });
+  </script>
+</body>
+</html>
+ -->
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Ledger</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      max-width: 100%;
+      margin: auto;
+    }
+    .form-container, .list-container {
+      flex: 1;
+      border: 2px solid #b3d7ff;
+      border-radius: 10px;
+      background-color: #eaf6ff;
+      padding: 20px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .upload-zone {
+      border: 2px dashed #007bff;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+      background-color: #f9f9f9;
+      cursor: pointer;
+    }
+    .upload-zone.dragover {
+      background-color: #e9ecef;
+    }
+    .file-list {
+      margin-top: 10px;
+    }
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      margin-bottom: 5px;
+      background-color: #f8f9fa;
+    }
+    .file-item span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 80%;
+    }
+    ol {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="form-container">
+        <h3 class="text-center mb-4">Important Steps or Points!</h3>
+        <ol>
+          <li>Please enter the site code present in the stock statement.</li>
+          <li>Example: IFM/BHR/INV/BPAC/01</li>
+          <li>Select start date and end date properly in dd-mm-yyyy format.</li>
+          <li>Filename must be sitecode.xlsx format.</li>
+          <li>Example: IFMBHRINVBPAC01</li>
+          <li>Make sure the format is xlsx</li>
+          <li>Upload the tally dump for the site code for the same date range.</li>
+          <li>Select the dates properly in dd-mm-yyyy format.</li>
+          <li>Click on process and wait for the download button.</li>
+          <li>Download the updated ledger/tally file.</li>
+        </ol>
+    </div>
+
+    <div class="form-container">
+      {% if file_name %}
+        <h5>{{ message }}</h5>
+        <!-- <h4>Download successful!</h4> -->
+        <h5 class="text-center mb-4">Successful! Please download the file.</h5>
+        <a href="/downloadledger?filename={{ file_name }}&filepath={{ file_path }}" class="btn btn-success btn-lg d-block text-center">Download Excel</a>
+      {% else %}
+        <h3 class="text-center mb-4">Upload Ledger/Tally Dump File</h3>
+      {% endif %}
+      <form id="uploadForm" action="{% url 'processledger' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- <div class="mb-3">
+          <label for="siteCode" class="form-label">Site Code</label>
+          <input type="text" id="siteCode" name="siteCode" class="form-control" placeholder="Enter Site Code" required>
+        </div>
+        <div class="mb-3">
+          <label for="siteType" class="form-label">Site Type</label>
+          <select id="siteType" name="siteType" class="form-select" required>
+            <option value="" disabled selected>Select Site Type</option>
+            <option value="G">G</option>
+            <option value="O">O</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="startDate" class="form-label">Start Date</label>
+          <input type="date" id="startDate" name="startDate" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="endDate" class="form-label">End Date</label>
+          <input type="date" id="endDate" name="endDate" class="form-control" required>
+        </div> -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="siteCode" class="form-label">Site Code</label>
+            <input type="text" id="siteCode" name="siteCode" class="form-control" placeholder="Enter Site Code" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="siteType" class="form-label">Site Type</label>
+            <select id="siteType" name="siteType" class="form-select" required>
+              <option value="" disabled selected>Select Site Type</option>
+              <option value="G">G</option>
+              <option value="O">O</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" id="startDate" name="startDate" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" id="endDate" name="endDate" class="form-control" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload Ledger File</label>
+          <div class="upload-zone" id="uploadZone">
+            Drag & Drop file here or click to upload
+          </div>
+          <input type="file" id="fileInput" name="files[]" class="form-control d-none" multiple accept=".xlsx">
+          <div id="fileList" class="file-list"></div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Process</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+
+    let uploadedFiles = [];
+
+    const updateFileList = () => {
+      fileList.innerHTML = '';
+      uploadedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.innerHTML = `
+          <span>${file.name}</span>
+          <button type="button" class="btn btn-sm btn-danger" onclick="removeFile(${index})">Remove</button>
+        `;
+        fileList.appendChild(fileItem);
+      });
+    };
+
+    const removeFile = (index) => {
+      uploadedFiles.splice(index, 1);
+      updateFileList();
+    };
+
+    const addFiles = (files) => {
+      files.forEach(file => {
+        if (!uploadedFiles.some(uploadedFile => uploadedFile.name === file.name)) {
+          uploadedFiles.push(file);
+        } else {
+          alert(`File "${file.name}" is already uploaded.`);
+        }
+      });
+      updateFileList();
+    };
+
+    uploadZone.addEventListener('click', () => fileInput.click());
+    uploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.classList.add('dragover');
+    });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('dragover');
+      const files = Array.from(e.dataTransfer.files);
+      addFiles(files);
+    });
+
+    fileInput.addEventListener('change', () => {
+      const files = Array.from(fileInput.files);
+      addFiles(files);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patrol Monitoring</title>
+</head>
+<body>
+
+<h2>Please download QR codes</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Place</th>
+    <th>QR-Code</th>
+    <th>Download Here</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% if d %}  
+    {% for i in d %}
+      <tr>
+        <td>{{i.place}}</td>
+        <td><img src="data:image/png;base64,{{ img }}"></td>
+        <td>
+          <a href="/downloadqr?qrvalue={{i.uuid}}&place={{i.place}}">
+          <div style="height:100%;width:100%">
+          DOWNLOAD PDF
+          </div>
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  {% endif %}
+  <tr>
+    <form method="post" action="/sendqrmail">
+    <td>site name: <input type="text" name="site_name" value="{{site}}" readonly ></td>
+    <td>please enter your mail id: <input type="text" name="mail_id" ></td>
+    <td><input type="submit" value="Submit"></td>
+    </form>
+  </tr>
+
+  </tbody>
+  
+</table>
+</form>
+
+</body>
+</html>

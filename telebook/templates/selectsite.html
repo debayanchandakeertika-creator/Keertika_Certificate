@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Register new user</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<form method="post" action="/addpostorder">
+		<p>Select Site: <select id="sitename" name="sitename">
+			{% for ele in sites %}
+			    <option value='{{ele}}'>{{ele}}</option>
+<!-- 			    <option value="saab">Secuirity Guard</option> -->
+			{% endfor %}
+  </select></p>
+		<input type="submit" value="Submit">
+	</form>
+
+
+</body>
+</html>

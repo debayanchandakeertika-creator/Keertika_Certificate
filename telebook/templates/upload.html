@@ -1,0 +1,378 @@
+<!-- excel_upload_app/templates/upload.html -->
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+</head>
+<body>
+    <h1>Upload Excel File</h1>
+    <input type="file" name="excel_file" accept=".xlsx">
+    <button type="submit" onclick="uploadExcel()">Upload</button>
+</body>
+</html>
+
+
+<script>
+    function uploadExcel() {
+        var input = document.querySelector('input[type="file"]');
+        var file = input.files[0];
+        var formData = new FormData();
+        formData.append('excel_file', file);
+
+        // Use the URL template tag to generate the correct URL
+        var url = "{% url 'process_data' %}";
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                alert('Excel file uploaded successfully. You can process the data as needed.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script> -->
+
+<!-- excel_upload_app/templates/upload.html -->
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+</head>
+<body>
+    <h1>Upload Excel File</h1>
+    <form method="post" enctype="multipart/form-data" action="{% url 'process_data' %}">
+        {% csrf_token %}
+        <input type="file" name="excel_file" accept=".xlsx">
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /*button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }*/
+
+        /*button[type="submit"]:hover {
+            background-color: #0056b3;
+        }*/
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            width: 100px;
+            cursor: pointer;
+        }
+        #jsonResult {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #333;
+        }
+
+        #loadingMessage  {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4285f4;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+
+        /* Add additional styles as needed */
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Statement Automation</h1>
+        <p>Please follow the instructions below:</p>
+        <ol>
+            <li>Click the "Choose File" button to select an Excel file for upload.</li>
+            <li>Ensure the selected file has the ".xlsx" extension.</li>
+
+            <li>Click the "Upload" button to begin the upload process.</li>
+            <li>Processing will take 5 to 6 minutes. Please do not close or reload this window.</li>
+            <li>After processing, you can download the file.</li>
+            <li>Bill Database updated at {{time}}</li>
+        </ol>
+        <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'process_data' %}">
+            {% csrf_token %}
+            <li>Choose the bank:
+                <select name="bank">
+                    <option value="">Please Select The Bank</option>
+                    <option value="HDFC">HDFC</option>
+                    <option value="HDFC Daily">HDFC Daily</option>
+                    <option value="SBI">SBI</option>
+                    <option value="BOM">BOM</option>
+                </select>
+            </li>
+            <input type="file" name="excel_file" accept=".xlsx, .xls">
+            <button type="button" id="uploadButton">Upload</button>
+            <!-- <button type="submit">Upload</button> -->
+        </form>
+    </div>
+    <div id="loadingMessage" style="display: none;">Processing.Please wait until it's done. Will redirect to new page once it's done</div>
+    <div id="resultArea"></div>
+    <div id="jsonResult" style="display: none;"></div>
+    <!-- <div id="resultArea"></div> -->
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- <script>
+        $(document).ready(function () {
+            // Handle button click
+            $("#uploadButton").click(function () {
+                // Show loading message
+                $("#loadingMessage").show();
+
+                // Submit the form using AJAX
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'process_data' %}",
+                    data: new FormData($("#uploadForm")[0]),
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        // Hide loading message
+                        $("#loadingMessage").hide();
+
+                        // Replace entire HTML content with the new data
+                        $("body").html(data);
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+
+                        // Hide loading message in case of error
+                        $("#loadingMessage").hide();
+                    }
+                });
+            });
+        });
+    </script> -->
+<script>
+        $(document).ready(function () {
+            // Handle button click
+            $("#uploadButton").click(function () {
+                // Show loading message
+                $("#loadingMessage").show();
+
+                // Submit the form using AJAX
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'process_data' %}",
+                    data: new FormData($("#uploadForm")[0]),
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        // Hide loading message
+                        $("#loadingMessage").hide();
+
+                        // Check if the response is HTML
+                        if ($.parseHTML(data).length > 0) {
+                            // Replace entire HTML content with the new data
+                            $("body").html(data);
+                        } else {
+                            // Handle JSON response
+                             $("#jsonResult").html(JSON.stringify(data, null, 2)).show();
+                            console.log("JSON Response:", data);
+                            // Add your JSON handling logic here
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+
+                        // Hide loading message in case of error
+                        $("#loadingMessage").hide();
+                    }
+                });
+            });
+        });
+    </script>
+</html>
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add additional styles as needed */
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Statement Automation</h1>
+        <p>Please follow the instructions below:</p>
+        <ol>
+            <li>Click the "Choose File" button to select an Excel file for upload.</li>
+            <li>Ensure the selected file has the ".xlsx" extension.</li>
+            <li>Click the "Upload" button to begin the upload process.</li>
+            <li>Processing will take 5 to 6 minutes time. Please do not close or reload this window</li>
+            <li>After Processing you can download the file.</li>
+        </ol>
+        <form method="post" enctype="multipart/form-data" action="{% url 'process_data' %}">
+            {% csrf_token %}
+            <input type="file" name="excel_file" accept=".xlsx">
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html> -->
+
+
+
+
+<!-- <script>
+    function uploadExcel() {
+        var input = document.querySelector('input[type="file"]');
+        var file = input.files[0];
+        var formData = new FormData();
+        formData.append('excel_file', file);
+
+        // Use the URL template tag to generate the correct URL
+        var url = "{% url 'process_data' %}";
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                alert('Excel file uploaded successfully. You can process the data as needed.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script> -->
+

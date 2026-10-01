@@ -1,0 +1,547 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <meta name="description" content=""/>
+  <meta name="author" content=""/>
+  <title>POST MONITORING DASHBOARD</title>
+  <!-- loader-->
+  <!-- <link href="assets/css/pace.min.css" rel="stylesheet"/> -->
+  <link href="{% static 'css/pace.min.css' %}" type="text/css" rel="stylesheet"/>
+  <script src="{% static 'js/pace.min.js' %}"></script>
+  <!--favicon-->
+  <link rel="icon" href="{% static 'images/logo2.png' %}" type="image/x-icon">
+  <!-- Vector CSS -->
+  <link href="{% static 'plugins/vectormap/jquery-jvectormap-2.0.2.css' %}" rel="stylesheet"/>
+  <!-- simplebar CSS-->
+  <link href="{% static 'plugins/simplebar/css/simplebar.css' %}" rel="stylesheet"/>
+  <!-- Bootstrap core CSS-->
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"/>
+  <!-- animate CSS-->
+  <link href="{% static 'css/animate.css' %}" rel="stylesheet" type="text/css"/>
+  <!-- Icons CSS-->
+  <link href="{% static 'css/icons.css' %}" rel="stylesheet" type="text/css"/>
+  <!-- Sidebar CSS-->
+  <link href="{% static 'css/sidebar-menu.css' %}" rel="stylesheet"/>
+  <!-- Custom Style-->
+  <link href="{% static 'css/app-style.css' %}" rel="stylesheet"/>
+  <style>
+    .my-custom-scrollbar {
+position: relative;
+height: 100px;
+overflow: auto;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+.tablecenterheadCSS td{
+  text-align:center;
+}
+
+.headcol {
+  position: absolute;
+  width: 5em;
+  left: 0;
+  top: auto;
+  border-top-width: 1px;
+  /*only relevant for first row*/
+  margin-top: -1px;
+  /*compensate for top border*/
+}
+</style>
+
+</head>
+
+<body class="bg-theme bg-theme2">
+ 
+<!-- Start wrapper-->
+ <div id="wrapper">
+ 
+  <!--Start sidebar-wrapper-->
+   <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
+     <div class="brand-logo" style="height: 70px;">
+      <a href="" >
+       <img src="{% static 'images/logo2.png' %}" class="logo-icon" alt="logo icon" style="width: 100px;height: 60px; margin: 3px;">
+       <!-- <h5 class="logo-text">Live Data</h5> -->
+     </a>
+   </div>
+   <ul class="sidebar-menu do-nicescrol">
+      <li class="sidebar-header">MAIN NAVIGATION</li>
+      <!-- <li>
+        <a href="/qrDashboard?sitecode={{sites}}&starthr={{starthr}}&gap={{gap}}">
+          <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>
+        </a>
+      </li> -->
+
+      <li>
+        <a href="/live?sitecode={{sites}}&A={{a}}&B={{b}}&C={{c}}&freq={{freq}}&night={{night}}">
+          <i class="zmdi zmdi-view-dashboard"></i> <span>Site Data</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/livepostorg?sitecode={{sites}}&A={{a}}&B={{b}}&C={{c}}&freq={{freq}}&night={{night}}">
+          <i class="zmdi zmdi-view-dashboard"></i> <span>Live Data</span>
+        </a>
+      </li>
+
+      <li class="nav-item nav-link active">
+        <a href="">
+          <i class="zmdi zmdi-view-dashboard"></i> <span>Deviation Alert</span>
+        </a>
+      </li>
+
+      <!-- <li>
+        <a href="/timestamp?sitecode={{sites}}&starthr={{starthr}}&gap={{gap}}">
+          <i class="zmdi zmdi-view-dashboard"></i> <span>Time Stamp</span>
+        </a>
+      </li> -->
+      <!-- <li class="dropdown">
+    	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Post List
+    		<span class="caret"></span>
+    	</a>
+    	<ul class="dropdown-menu">
+      		{% for val in uuidList %}
+      		<div class="container-fluid">
+      		<li>
+        		<a href="/qrDashboard/postView?sitecode={{sitecode}}&placeid={{val.0}}">
+          		<i class="zmdi zmdi-view-dashboard"></i> <span>{{val.1}}</span>
+        		</a>
+      		</li>
+      		</div>
+      		{% endfor %}
+    	</ul>
+  	  </li> -->
+      <!-- <li class="dropdown">
+    	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Employee List
+    		<span class="caret"></span>
+    	</a>
+    	<ul class="dropdown-menu">
+      		{% for empdata in empdata %}
+      		<div class="container-fluid">
+      		<li>
+        		<a href="/qrDashboard/empView?sitecode={{sitecode}}&emp={{empdata.0}}">
+          		<i class="zmdi zmdi-view-dashboard"></i> <span>{{empdata.1}}</span>
+        		</a>
+      		</li>
+      		</div>
+      		{% endfor %}
+    	</ul>
+  	  </li> -->
+
+    </ul>
+   
+   </div>
+   <!--End sidebar-wrapper-->
+
+<!--Start topbar header-->
+<header class="topbar-nav">
+ <nav class="navbar navbar-expand fixed-top" style="height: 80px;">
+  <ul class="navbar-nav mr-auto align-items-center">
+    <li class="nav-item">
+      <a class="nav-link toggle-menu" href="javascript:void();" style="margin-top: 20px;">
+       <i class="icon-menu menu-icon"></i>
+     </a>
+    </li>
+    <li>
+      <button onclick="window.history.go(-1); return false;" style="cursor:pointer; background-color: transparent;color: #fff;font-weight: bold;border: none;"> <i class="fa fa-arrow-left"></i>Go back!</button>
+    </li>
+  </ul>
+</nav>
+</header>
+<!--End topbar header-->
+
+<div class="clearfix"></div>
+	
+  <div class="content-wrapper">
+    <div class="container-fluid">
+
+  <!--Start Dashboard Content-->
+  <div class="row">
+    <div class="col-12 col-lg-12">
+      <div class="card">
+        <div class="card-header"><h5 class="mb-0">SITE INFO</h5></div>
+        <p class="mb-0" style="font-weight: bold;color: #C8FFD4; margin: 10px;">Site Name: {{sites}}</p>
+        {% for ele in siteinfo%}
+        <p class="mb-0" style="font-weight: bold;color: #C8FFD4; margin: 10px;">{{ele}}</p>
+        {% endfor %}
+        
+      </div>
+
+      
+    </div>
+    
+  </div>
+
+
+
+
+
+  
+
+	
+
+
+   <div class="row">
+     <div class="col-12 col-lg-12">
+       <div class="card">
+         <div class="card-header">Daily Report
+          ({{dt_1}})
+          
+
+        <div class="card-action">
+               
+               </div>
+          
+       </div>
+
+      <div class="row">
+     <div class="col-12 col-lg-12">
+       <div class="card">
+         <div class="card-header">
+            <h5 class="mb-0">What is this Deviation?</h5>
+            <p>If a security guard/supervisor scans multiple QR codes within 60 seconds then this deviation alert will appear.</p>
+            <h5 class="mb-0">What are the proable reasons?</h5>
+            <p><i class="fa fa-thumbs-up" aria-hidden="true" style="color: #00ff00"></i> Those places are so close that the person can cover easily within a minute</p>
+            <p><i class="fa fa-thumbs-down" aria-hidden="true" style="color: #ff0000"></i> The person may be doing same malprcatice & not going to the original place.</p>
+
+          <div class="form-group">
+            <!-- <form action="/sitedata" method="GET">
+            
+              <div class="form-group">
+             <div class="form-group">
+              <label for="date_inp">Select Place</label>
+              <label for="date_inp">Date</label>
+                <input type="text" class="form-control" id="date_inp" name="date_inp" value="{{filter_date}}" autocomplete="off">
+               </div>
+               <input type="hidden" id="sitecode" name="sitecode" value={{sites}}>
+                <input type="hidden" id="A" name="A" value={{a}}>
+                <input type="hidden" id="B" name="B" value={{b}}>
+                <input type="hidden" id="C" name="C" value={{c}}>
+                <input type="hidden" id="freq" name="freq" value={{freq}}>
+                <input type="hidden" id="night" name="night" value={{night}}>
+                <input type="hidden" id="auth" name="auth" value={{auth}}>
+                <button type="submit" class="btn btn-light btn-round px-5" style="margin: 5px;"> Submit</button>
+
+            </div>
+
+          </form> -->
+          </div>
+       </div>
+
+           <div class="table-responsive" style="overflow-y: scroll; height: 500px;">
+                  <table class="table align-items-center table-flush table-borderless" id="myTable">
+
+                  <thead style="position: sticky;">
+                   <tr>
+                     <th style="position: sticky; top: 0;background: #071330;">Multiple Scan within 60 seconds(1 minute)</th>
+                     <th style="position: sticky; top: 0;background: #071330;">Place Name</th>
+                   </tr>
+                   </thead>
+                     <tbody>
+                      {% if d1 %}
+                        {% for j in d1 %}
+                        <tr>
+                          <td style="font-weight: bold;">{{j.data}}</td>
+                          <td style="font-weight: bold;">{{j.place}}</td>
+                        </tr>
+
+                      {% endfor %}
+                    {%endif%}
+
+                   </tbody></table>
+                 </div>
+       </div>
+     </div>
+    </div>
+
+    
+       </div>
+     </div>
+    </div>
+
+
+
+  <div class="row">
+    <div class="col-12 col-lg-12">
+      <div class="card">
+        <div class="card-header">SUDDEN SCANNING
+        <h5 class="mb-0">What is this Deviation?</h5>
+            <p>In a site if more than 4 places scanned within same minute by multiple people then this deviation will appear</p>
+            <h5 class="mb-0">What are the proable reasons?</h5>
+            <p><i class="fa fa-thumbs-up" aria-hidden="true" style="color: #00ff00"></i> Originally different people are scanning at the same time.</p>
+            <p><i class="fa fa-thumbs-down" aria-hidden="true" style="color: #ff0000"></i> Some of the security guards doing malpractice & scanning QR codes without going to the respective places.</p>
+        </div>
+        <div class="card-body">
+
+          <div class="table-responsive" style="overflow-y: scroll; height: 500px;">
+             <table class="table align-items-center table-flush table-borderless" id="myTable1">
+               <thead >
+                 <th style="position: sticky; top: 0;background: #071330;">More than 4 places scanned at same time</th>
+                 <!-- <th style="position: sticky; top: 0;background: #071330;">Visit at</th>
+                 <th style="position: sticky; top: 0;background: #071330;">Visit By</th>
+                 <th style="position: sticky; top: 0;background: #071330;">Shift</th> -->
+               </thead>
+               <tbody>
+                {% if d2 %}
+                 {% for j in d2 %}
+                 <tr>
+                   <td style="font-weight: bold;">{{j.data}}</td>
+                   <!-- <td style="font-weight: bold;">{{j.datetime1}}</td>
+                   <td style="font-weight: bold;">{{j.empname}}</td>
+                   <td style="font-weight: bold;">{{j.shift}}</td> -->
+                 </tr>
+                 {% endfor %}
+                 {%endif%}
+               </tbody>
+             </table>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+
+<div class="row">
+    <div class="col-12 col-lg-12">
+      <div class="card">
+        <div class="card-header">LOCATION DEVIATION
+          <h5 class="mb-0">What is this Deviation?</h5>
+            <p>All our QR codes are geo-tagged. During scanning if the scanned location is not within a certain limit then this deviation will occur.</p>
+            <h5 class="mb-0">What are the proable reasons?</h5>
+            <p><i class="fa fa-thumbs-up" aria-hidden="true" style="color: #00ff00"></i> Due to slow internet location captured during scanning is not latest</p>
+            <!-- <p><i class="fa fa-thumbs-up" aria-hidden="true" style="color: #00ff00"></i> If th</p> -->
+            <p><i class="fa fa-thumbs-down" aria-hidden="true" style="color: #ff0000"></i> The person is scanning the QR codes without going to the place.(May be using some clicked picture of the QR code)</p>
+        </div>
+
+        </div>
+        <div class="card-body">
+          <div class="row">
+          <!-- <div class="form-group col-12 col-lg-3" style="margin: 5px;">
+              <input class="form-control" type="text" name="myInput" id="myInput" onkeyup="myFunction()" placeholder="Type Place Name to Search....">
+          </div>
+          <div class="form-group col-12 col-lg-3" style="margin: 5px;">
+              <input class="form-control" type="text" name="myInput1" id="myInput1" onkeyup="myFunction1()" placeholder="Type emp Name to Search....">
+          </div>
+          <div class="form-group col-12 col-lg-3" style="margin: 5px;">
+              <input class="form-control" type="text" name="myInput2" id="myInput2" onkeyup="myFunction2()" placeholder="Type shift name to Search....">
+          </div>
+ -->
+
+
+              
+
+              <!-- <input type="hidden" id="sitecode" name="sitecode" value={{sites}}> -->
+
+              <!-- <button type="submit" class="btn btn-light btn-round px-5" style="margin: 5px;"> Submit</button> -->
+            </div>
+          <div class="table-responsive" style="overflow-y: scroll; height: 500px;">
+             <table class="table align-items-center table-flush table-borderless" id="myTable1">
+               <thead >
+                 <th style="position: sticky; top: 0;background: #071330;">Location Deviation</th>
+                 <!-- <th style="position: sticky; top: 0;background: #071330;">Visit at</th>
+                 <th style="position: sticky; top: 0;background: #071330;">Visit By</th>
+                 <th style="position: sticky; top: 0;background: #071330;">Shift</th> -->
+               </thead>
+               <tbody>
+                {% if d3 %}
+                 {% for j in d3 %}
+                 <tr>
+                   <td style="font-weight: bold;">{{j.data}}</td>
+                   <!-- <td style="font-weight: bold;">{{j.datetime1}}</td>
+                   <td style="font-weight: bold;">{{j.empname}}</td>
+                   <td style="font-weight: bold;">{{j.shift}}</td> -->
+                 </tr>
+                 {% endfor %}
+                 {%endif%}
+               </tbody>
+             </table>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+
+
+
+  
+   
+<!-- </div> Final Div -->
+
+	
+
+		  <div class="overlay toggle-menu"></div>
+		<!--end overlay-->
+		
+    </div>
+    <!-- End container-fluid-->
+    
+    </div><!--End content-wrapper-->
+   <!--Start Back To Top Button-->
+    <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+    <!--End Back To Top Button-->
+	
+	<!--Start footer-->
+
+	<!--End footer-->
+	
+  <!--start color switcher-->
+   <div class="right-sidebar">
+    <div class="switcher-icon">
+      <i class="zmdi zmdi-settings zmdi-hc-spin"></i>
+    </div>
+    <div class="right-sidebar-content">
+
+      <p class="mb-0">Gaussion Texture</p>
+      <hr>
+      
+      <ul class="switcher">
+        <li id="theme1"></li>
+        <li id="theme2"></li>
+        <li id="theme3"></li>
+        <li id="theme4"></li>
+        <li id="theme5"></li>
+        <li id="theme6"></li>
+      </ul>
+
+      <p class="mb-0">Gradient Background</p>
+      <hr>
+      
+      <ul class="switcher">
+        <li id="theme7"></li>
+        <li id="theme8"></li>
+        <li id="theme9"></li>
+        <li id="theme10"></li>
+        <li id="theme11"></li>
+        <li id="theme12"></li>
+		<li id="theme13"></li>
+        <li id="theme14"></li>
+        <li id="theme15"></li>
+      </ul>
+      
+     </div>
+   </div>
+  <!--end color switcher-->
+   
+  </div><!--End wrapper-->
+
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+	
+ <!-- simplebar js -->
+  <script src="{% static 'plugins/simplebar/js/simplebar.js' %}"></script>
+  <!-- sidebar-menu js -->
+  <script src="{% static 'js/sidebar-menu.js' %}"></script>
+  <!-- loader scripts -->
+  <script src="{% static 'js/jquery.loading-indicator.js' %}"></script>
+  <!-- Custom scripts -->
+  <script src="{% static 'js/app-script.js' %}"></script>
+  <!-- Chart js -->
+  <!-- <script src="{% static 'js/bootstrap-datepicker.js' %}"></script> -->
+  
+  <script src="{% static 'plugins/Chart.js/Chart.min.js' %}"></script>
+
+ 
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  
+</body>
+<script type="text/javascript">
+
+
+  $(function() {
+    $( "#date_inp" ).datepicker({
+      format: 'yyyy-mm-dd',
+      autoclose: true,
+
+    });
+  } )
+
+  
+
+//   window.setTimeout( function() {
+//   window.location.reload();
+// }, 60000);
+
+
+
+   function myFunction() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable1");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+      }
+    } 
+
+
+  function myFunction1() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput1");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable1");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[2];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+      }
+    } 
+
+
+  function myFunction2() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput2");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable1");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[3];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+      }
+    } 
+
+
+
+   
+</script>
+</html>

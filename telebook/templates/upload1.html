@@ -1,0 +1,157 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            max-width:500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add additional styles as needed */
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Statement Automation</h1>
+        <p>Please follow the instructions below:</p>
+        <ol>
+            <li>Download the excel file</li>
+            <li>There are 6 sheets in the output excel file</li>
+            <li>sheet 1 (Name: exact match with bill): consist all the statements with exact match with bill</li>
+            <li>sheet 2 (Name: not exact match): consist all the statements where there is no exact match, but nearest match</li>
+            <li>sheet 3 (Name: not bill data): consist all the statements where no bill data found against probable clientcode</li>
+            <li>sheet 4 (Name: client code not found): consist all the statements where no client code found against probable client name</li>
+            <li>sheet 5 (Name: non credit transaction): All debit transactions</li>
+            <li>sheet 6 (Name: undetected transaction): Undetected Transactions</li>
+            <li>After download please click the Go back to main page</li>
+            <li>After Processing you can download the file.</li>
+        </ol>
+        <a href="/downloadexcel?filename={{file_name}}&filepath={{file_path}}" class="btn btn-primary">Download Excel</a>
+        <a href="/upload_excel" class="btn btn-primary">Go back to main page</a> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Statement Automation</title>
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        a.btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        a.btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Statement Automation</h1>
+        <p>Please follow the instructions below:</p>
+        <ul>
+            <li>Download the excel file</li>
+            <li>There are 6 sheets in the output excel file</li>
+            <li>Sheet 1 (Exact Match with Bill): Contains all the statements with an exact match with a bill</li>
+            <li>Sheet 2 (Not Exact Match): Contains all the statements where there is no exact match but the nearest match</li>
+            <li>Sheet 3 (Not Bill Data): Contains all the statements where no bill data was found against a probable client code</li>
+            <li>Sheet 4 (Client Code Not Found): Contains all the statements where no client code was found against a probable client name</li>
+            <li>Sheet 5 (Non-Credit Transaction): All debit transactions</li>
+            <li>Sheet 6 (Undetected Transaction): Undetected Transactions</li>
+            <li>After download, please click 'Go Back to Main Page'</li>
+            <li>After processing, you can download the file</li>
+        </ul>
+        <a href="/downloadexcel?filename={{file_name}}&filepath={{file_path}}" class="btn">Download Excel</a>
+        <a href="/upload_excel" class="btn">Go Back to Main Page</a>
+    </div>
+</body>
+</html>
+        

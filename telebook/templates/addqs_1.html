@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>File Upload Form</title>
+</head>
+<body>
+	<h1>PO upload form</h1>
+	<form method="post" action="/submitqs" enctype="multipart/form-data">
+		<label for="file">Choose a file to upload:</label>
+		<input type="file" id="file" name="file"><br><br>
+		<input type="hidden" name="uuid" value={{uuid}}>
+		<input type="hidden" name="site" value="{{site}}">
+		<input type="hidden" name="qs_count" value={{qscount}}>
+		<input type="submit" value="Upload File">
+	</form>
+</body>
+</html>

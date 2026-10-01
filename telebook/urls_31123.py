@@ -1,0 +1,68 @@
+from django.urls import path
+
+from . import views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+urlpatterns = [
+   	path('getinfo', views.rounCal, name='roundCalculate'),
+	path('storeData', views.storeData, name='storeData'),
+	# path('storeDataUuid', views.storeDataUuid, name='storeData'),
+	path('zone',views.zone,name='zone'),
+	path('downloadData',views.download_csv_data,name='download_data'),
+	path('downloadData1',views.download_csv_data1,name='download_data1'),
+	path('checkEmp',views.checkEmp,name='checkEmp'),
+	path('saveEmp',views.saveEmp,name='saveEmp'),
+	path('get_graph',views.get_graph,name='get_graph'),
+	path('roundsgraph',views.roundsGraph,name='get_graph'),
+	path('test',views.test,name='test'),
+	path('test1',views.test1,name='test1'),
+	path('selectFields',views.selectFields,name='selectFields'),
+	path('storeDataComp',views.storeDataComp,name='storeDataComp'),
+	path('storeDataSite',views.storeDataSite,name='storeDataSite'),
+	path('storeDataPlace',views.storeDataPlace,name='storeDataPlace'),
+	path('reportGen',views.reportGen,name='reportGen'),
+	path('database_check',views.database_check,name='database_check'),
+	path('autoreport',views.autoreport,name='autoreport'),
+	path('qrgeneration',views.qrgeneration,name='qrgeneration'),
+	path('pdf_gen',views.pdf_gen,name='pdf_gen'),
+	path('downloadqr',views.downloadqr,name='downloadqr'),
+	path('addnewsite',views.addnewsite,name='addnewsite'),
+	path('sendqrmail',views.sendqrmail,name='sendqrmail'),
+	path('register', views.register, name='register'),
+	path('login', views.login, name='login'),
+	path('qrDashboard',views.qrDashboard,name='qrdashboard'),
+	path('qrDashboard/empView',views.employeeView,name='empView'),
+	path('qrDashboard/postView',views.postView,name='postView'),
+	path('qrDashboard/qrfilter',views.getData,name='getData'),
+	path('getApi',views.getApiData,name='getApiData'),
+	path('qrReport',views.qrReport,name='QRReport'),
+	path('livedata',views.livedata,name='livedata'),
+	path('qrReport2s', views.qrReportTwoShift, name='QRReport2s'),
+	path('successrate', views.successrate, name='successrate'),
+	path('timestamp', views.timestamp, name='timestamp'),
+	path('qrReportbhu', views.qrReportbhu, name='QRReportbhu'),
+	path('qrReportbhu2s', views.qrReportbhu2s, name='QRReportbhu2s'),
+	path('qrReportE', views.qrReportEmami, name='QRReportEmami'),
+	path('masterdashboard', views.masterdashboard, name='masterdashboard'),
+	path('postlist', views.postlist, name='postlist'),
+	path('patrolist', views.patrolist, name='patrolist'),
+	path('live', views.live, name='live'),
+	path('livepatrol', views.livepatrol, name='livepatrol'),
+	path('livepostorg', views.livepostorg, name='livepostorg'),
+	path('sitedata', views.sitedata, name='sitedata'),
+	path('qrReportabg', views.qrReportabg, name='qrReportabg'),
+	path('qrReportpostpatrol', views.qrReportpostpatrol, name='qrReportpostpatrol'),
+	path('qrReportabcgm', views.qrReportabcgm, name='qrReportabcgm'),
+	path('qrReportabc', views.qrReportabc, name='qrReportabc'),
+	path('check_login', views.check_login, name='check_login'),
+	path('deviation', views.deviation, name='deviation'),
+	path('get_emp_data', views.get_emp_data, name='get_emp_data'),
+	path('qrReporthouse', views.qrReporthouse, name='qrReporthouse'),
+	path('calculate_score', views.calculate_score, name='calculate_score'),
+	path('qrReportevent', views.qrReportevent, name='qrReportevent'),
+
+
+
+
+
+]
+urlpatterns+=staticfiles_urlpatterns()

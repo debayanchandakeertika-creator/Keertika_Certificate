@@ -1,0 +1,267 @@
+<!-- excel_upload_app/templates/upload.html -->
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+</head>
+<body>
+    <h1>Upload Excel File</h1>
+    <input type="file" name="excel_file" accept=".xlsx">
+    <button type="submit" onclick="uploadExcel()">Upload</button>
+</body>
+</html>
+
+
+<script>
+    function uploadExcel() {
+        var input = document.querySelector('input[type="file"]');
+        var file = input.files[0];
+        var formData = new FormData();
+        formData.append('excel_file', file);
+
+        // Use the URL template tag to generate the correct URL
+        var url = "{% url 'process_data' %}";
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                alert('Excel file uploaded successfully. You can process the data as needed.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script> -->
+
+<!-- excel_upload_app/templates/upload.html -->
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+</head>
+<body>
+    <h1>Upload Excel File</h1>
+    <form method="post" enctype="multipart/form-data" action="{% url 'process_data' %}">
+        {% csrf_token %}
+        <input type="file" name="excel_file" accept=".xlsx">
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add additional styles as needed */
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Statement Automation</h1>
+        <p>Please follow the instructions below:</p>
+        <ol>
+            <li>Click the "Choose File" button to select an Excel file for upload.</li>
+            <li>Ensure the selected file has the ".xlsx" extension.</li>
+
+            <li>Click the "Upload" button to begin the upload process.</li>
+            <li>Processing will take 5 to 6 minutes. Please do not close or reload this window.</li>
+            <li>After processing, you can download the file.</li>
+        </ol>
+        <form method="post" enctype="multipart/form-data" action="{% url 'process_data' %}">
+            {% csrf_token %}
+            <li>Choose the bank:
+                <select name="bank">
+                    <option value="">Please Select The Bank</option>
+                    <option value="HDFC">HDFC</option>
+                    <option value="SBI">SBI</option>
+                    <option value="BOM">BOM</option>
+                </select>
+            </li>
+            <input type="file" name="excel_file" accept=".xlsx, .xls">
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel</title>
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add additional styles as needed */
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Statement Automation</h1>
+        <p>Please follow the instructions below:</p>
+        <ol>
+            <li>Click the "Choose File" button to select an Excel file for upload.</li>
+            <li>Ensure the selected file has the ".xlsx" extension.</li>
+            <li>Click the "Upload" button to begin the upload process.</li>
+            <li>Processing will take 5 to 6 minutes time. Please do not close or reload this window</li>
+            <li>After Processing you can download the file.</li>
+        </ol>
+        <form method="post" enctype="multipart/form-data" action="{% url 'process_data' %}">
+            {% csrf_token %}
+            <input type="file" name="excel_file" accept=".xlsx">
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html> -->
+
+
+
+
+<!-- <script>
+    function uploadExcel() {
+        var input = document.querySelector('input[type="file"]');
+        var file = input.files[0];
+        var formData = new FormData();
+        formData.append('excel_file', file);
+
+        // Use the URL template tag to generate the correct URL
+        var url = "{% url 'process_data' %}";
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                alert('Excel file uploaded successfully. You can process the data as needed.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script> -->
+

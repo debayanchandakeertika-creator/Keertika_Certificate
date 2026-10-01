@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>F Convertor</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .form-container {
+      flex: 1;
+      border: 2px solid #b3d7ff;
+      border-radius: 10px;
+      background-color: #eaf6ff;
+      padding: 20px;
+    }
+    .upload-zone {
+      border: 2px dashed #007bff;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+      background-color: #f9f9f9;
+      cursor: pointer;
+    }
+    .upload-zone.dragover {
+      background-color: #e9ecef;
+    }
+    .file-list {
+      margin-top: 10px;
+    }
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      margin-bottom: 5px;
+      background-color: #f8f9fa;
+    }
+    .file-item span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="form-container">
+      {% if file_name %}
+        <h5>{{ message }}</h5>
+        <!-- <h4>Download successful!</h4> -->
+        <h5 class="text-center mb-4">Successful! Please download the file.</h5>
+        <a href="/downloadledger1?filename={{ file_name }}&filepath={{ file_path }}" class="btn btn-success btn-lg d-block text-center">Download Excel</a>
+      {% else %}
+        <h3 class="text-center mb-4">Upload Updated Ledger File</h3>
+        <ol>
+        <li>Please select the Final working file.</li>
+        <li>Make sure the file is in .xlsx format only</li>
+        <li>Make sure the filename format is Sitecode_Updated_Final.xlsx</li>
+        <li>Make sure the file contain <strong>Final Working</strong> worksheet.</li>
+        <li>Make sure Columns starts from A10 i.e. 10th row.</li>
+        <li>Make sure A8 contains ledger period.</li>
+      </ol>
+      {% endif %}
+      <form id="uploadForm" action="{% url 'fw_to_f' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+          <label class="form-label">Upload Updated Ledger File</label>
+          <div class="upload-zone" id="uploadZone">
+            Drag & Drop file here or click to upload
+          </div>
+          <input type="file" id="fileInput" name="files[]" class="form-control d-none" multiple accept=".xlsx">
+          <div id="fileList" class="file-list"></div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Process</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const uploadButton = document.getElementById('uploadButton');
+
+    let uploadedFiles = [];
+
+    // Function to add files
+    const addFiles = (files) => {
+      files.forEach((file) => {
+        if (!uploadedFiles.some(uploadedFile => uploadedFile.name === file.name)) {
+          uploadedFiles.push(file);
+        } else {
+          alert(`File "${file.name}" is already added.`);
+        }
+      });
+      updateFileList();
+    };
+
+    // Update the file list in the UI
+    const updateFileList = () => {
+      fileList.innerHTML = '';
+      uploadedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.classList.add('file-item');
+        fileItem.innerHTML = `
+          <span>${file.name}</span>
+          <button class="btn btn-sm btn-danger" onclick="removeFile(${index})">Remove</button>
+        `;
+        fileList.appendChild(fileItem);
+      });
+    };
+
+    // Remove a file
+    const removeFile = (index) => {
+      uploadedFiles.splice(index, 1);
+      updateFileList();
+    };
+
+    // // Upload files
+    // const uploadFiles = () => {
+    //   const formData = new FormData();
+    //   uploadedFiles.forEach(file => {
+    //     formData.append('files[]', file);
+    //   });
+
+    //   fetch("{% url 'fw_to_f' %}", {
+    //     method: 'POST',
+    //     headers: {
+    //       'X-CSRFToken': '{{ csrf_token }}'
+    //     },
+    //     body: formData
+    //   })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     if (data.status === 'success') {
+    //       alert(JSON.stringify(data, null, 2));
+    //       // alert('Files uploaded successfully!');
+    //       uploadedFiles = [];
+    //       updateFileList();
+    //     } else {
+    //       alert('Failed to upload files.');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('Error uploading files:', error);
+    //     alert('Error uploading files.');
+    //   });
+    // };
+
+    // Upload files
+  
+    // Event listeners
+    uploadZone.addEventListener('click', () => fileInput.click());
+    uploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.classList.add('dragover');
+    });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('dragover');
+      addFiles(Array.from(e.dataTransfer.files));
+    });
+    fileInput.addEventListener('change', () => addFiles(Array.from(fileInput.files)));
+
+    uploadButton.addEventListener('click', uploadFiles);
+  </script>
+</body>
+</html>

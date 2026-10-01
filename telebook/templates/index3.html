@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Patrol Monitoring</title>
+</head>
+<body>
+
+<h2>Please enter the new site name</h2>
+<p>
+	
+	  
+<!-- /upload/?token=FRSvnoKJnlnloaenvhfl74avdw1ASD14av6w1631tf6A8h1thf61fgYhd41g39d1Lgawa1e3aEe3K32asNdsa" enctype="multipart/form-data -->
+</p>
+<form method="post" action="/addnewsite">
+    <dl>
+		<!-- <p>
+			<input type="file" name="file" multiple="false" autocomplete="off" required>
+		</p> -->
+		<p>
+			Enter New site ID: <input type="text" name="sitename" >
+		</p>
+		<p>
+			Location: <input type="text" name="placeid" >
+		</p>
+		<p>
+			Please select the Company:
+		<select id="option" name="option">
+			<option value="volvo">----</option>
+			{% if d %}  
+				{% for i in d %}
+				<option value={{i.name}}>{{i.name}}</option>
+				{% endfor %}
+			{% endif %}
+		</select>
+		</p>
+
+		<p>
+			Please select the Method:
+		<select id="method" name="method">
+			<option value="volvo">-------</option>
+			<option value="1">Generate QR Codes, Floor/buidling wise</option>
+			<option value="2">Generate All QR codes</option>
+
+		</select>
+		</p>
+    </dl>
+    <p>
+		<input type="submit" value="Submit">
+	</p>
+</form>
+</body>
+</html>

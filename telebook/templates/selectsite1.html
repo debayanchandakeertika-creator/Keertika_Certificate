@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Register new user</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	{% if msg %}
+	<h4>{{msg}}</h4>
+	{% endif %}
+	<form method="get" action="/addqs">
+		<p>Select post: <select id="uuid" name="uuid">
+			{% for ele in beacon %}
+			    <option value='{{ele.0}}'>{{ele.2}}--{{ele.1}}</option>
+	}
+<!-- 			    <option value="saab">Secuirity Guard</option> -->
+			{% endfor %}
+  </select></p>
+  <p>Total no. of question: <input type="number" name="qsno" min="1" max="20"><br></p>
+<input type="text" hidden="true" name="site" value="{{site}}"><br></p>
+
+		<input type="submit" value="Submit">
+	</form>
+
+
+</body>
+</html>
